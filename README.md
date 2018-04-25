@@ -1,6 +1,6 @@
 # b2iweb-vue
 
-> A Vue.js project
+> A Vue.js project (front end part)
 
 ## Build Setup
 
