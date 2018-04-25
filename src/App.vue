@@ -58,11 +58,11 @@ export default {
   data () {
     return {
       drawer: false,
-      title: 'Vuetify.js',
+      title: 'Bridge Stone 2 Inventors',
       menuItems: [
-        { title: 'Home', path: '/', icon: 'home'},
-        { title: 'Blog', path: '/Blog', icon: 'assignment'},
-        { title: 'SignIn', path: '/Signin', icon: 'face'}
+        {title: 'Home', path: '/', icon: 'home'},
+        {title: 'Blog', path: '/Blog', icon: 'assignment'},
+        {title: 'Sign In', path: '/Signin', icon: 'face'}
       ]
     }
   },
