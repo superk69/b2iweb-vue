@@ -1,7 +1,9 @@
 <template>
   <v-app>
     <v-navigation-drawer v-model="drawer" app>
+      <!-- action menu  -->
       <v-list>
+
         <v-list-tile
           v-for="item in menuItems"
           :key="item.title"
@@ -11,8 +13,15 @@
           </v-list-tile-action>
           <v-list-tile-content>{{ item.title }}</v-list-tile-content>
         </v-list-tile>
+        <v-list-tile @click="userSignOut" v-if="isAuthenticated">
+          <v-list-tile-action>
+            <v-icon>exit_to_app</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-content>Sign Out</v-list-tile-content>
+        </v-list-tile>
       </v-list>
     </v-navigation-drawer>
+
     <v-toolbar app >
       <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
       <v-toolbar-title>
@@ -29,6 +38,10 @@
           :to="item.path">
           <v-icon left dark>{{ item.icon }}</v-icon>
           {{ item.title }}
+        </v-btn>
+        <v-btn flat @click="userSignOut" v-if="isAuthenticated">
+          <v-icon left>exit_to_app</v-icon>
+            Sign Out
         </v-btn>
       </v-toolbar-items>
     </v-toolbar>
@@ -57,19 +70,37 @@
 export default {
   data () {
     return {
-      drawer: false,
-      title: 'Bridge Stone 2 Inventors',
-      menuItems: [
-        {title: 'Home', path: '/', icon: 'home'},
-        {title: 'Blog', path: '/Blog', icon: 'assignment'},
-        {title: 'Sign In', path: '/Signin', icon: 'face'},
-        {title: 'Sign Up', path: '/Signup', icon: 'lock_open'}
-      ]
+      drawer: false
     }
   },
   computed: {
     title () {
       return this.$store.state.title
+    },
+    drawer () {
+      return this.$store.state.drawer
+    },
+    isAuthenticated () {
+      return this.$store.getters.isAuthenticated
+    },
+    menuItems () {
+      if (this.isAuthenticated) {
+        return [
+          {title: 'Home', path: '/', icon: 'home'},
+          {title: 'Blog', path: '/Blog', icon: 'assignment'}
+        ]
+      } else {
+        return [
+          {title: 'Home', path: '/', icon: 'home'},
+          {title: 'Sign In', path: '/Signin', icon: 'face'},
+          {title: 'Sign Up', path: '/Signup', icon: 'lock_open'}
+        ]
+      }
+    }
+  },
+  methods: {
+    userSignOut () {
+      this.$store.dispatch('userSignOut')
     }
   },
   name: 'App'

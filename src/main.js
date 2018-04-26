@@ -12,19 +12,27 @@ import firebase from 'firebase'
 Vue.use(Vuetify)
 
 firebase.initializeApp({
-  apiKey: '
-  authDomain: '
-  databaseURL: '
-  projectId: '
-  storageBucket: '
+  apiKey: 'AIzaSyAzGeJc89-sbkxICqahAlmX8XShuW8iGBc',
+  authDomain: 'b2iweb-vue.firebaseapp.com',
+  databaseURL: 'https://b2iweb-vue.firebaseio.com',
+  projectId: 'b2iweb-vue',
+  storageBucket: 'b2iweb-vue.appspot.com'
 })
 
 Vue.config.productionTip = false
 
 /* eslint-disable no-new */
-new Vue({
-  el: '#app',
-  router,
-  store,
-  render: h => h(App)
+const unsubscribe = firebase.auth().onAuthStateChanged((firebaseUser) => {
+  new Vue({
+    el: '#app',
+    router,
+    store,
+    render: h => h(App),
+    created () {
+      if (firebaseUser) {
+        store.dispatch('autoSignIn', firebaseUser)
+      }
+    }
+  })
+  unsubscribe()
 })
