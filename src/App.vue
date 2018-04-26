@@ -14,27 +14,6 @@
           <v-list-tile-content>{{ item.title }}</v-list-tile-content>
         </v-list-tile>
 
-
-        <v-list-group
-        :prepend-icon="iconRegister"
-        no-action
-        value="false"
-        >
-        <v-list-tile slot="activator">
-          <v-list-tile-title>{{titleRegister}}</v-list-tile-title>
-        </v-list-tile>
-            <v-list-tile
-              v-for="item in menuRegister" 
-              :key="item.title" 
-              :to="item.path"
-            >
-              <v-list-tile-title v-text="item.title"></v-list-tile-title>
-              <v-list-tile-action>
-                <v-icon v-text="item.icon"></v-icon>
-              </v-list-tile-action>
-            </v-list-tile>
-        </v-list-group>
-
         <v-list-group
         :prepend-icon="iconProject"
         no-action
@@ -82,27 +61,6 @@
           <v-icon left dark>{{ item.icon }}</v-icon>
           {{ item.title }}
         </v-btn>
-
-
-        <v-menu offset-y>
-          <v-btn slot="activator">
-            <v-icon left dark>{{iconRegister}}</v-icon>
-            {{titleRegister}}
-            <v-icon left dark>keyboard_arrow_down</v-icon>
-          </v-btn>
-          <v-list>
-            <v-list-tile v-for="item in menuRegister" :key="item.title" :to="item.path">
-              <v-list-tile-action>
-                <v-icon>{{ item.icon }}</v-icon>      
-              </v-list-tile-action>
-              <v-list-tile-content>
-                <v-list-tile-title>
-                  {{ item.title }}
-                </v-list-tile-title>
-              </v-list-tile-content>
-            </v-list-tile>
-          </v-list>
-        </v-menu>
 
         <v-menu offset-y>
           <v-btn slot="activator">
@@ -152,21 +110,16 @@
 </template>
 
 <script>
+/* eslint-disable */
 export default {
   data () {
     return {
-       drawer: false,
+      drawer: false,
       title: 'Bridge Stone 2 Inventors',
       menuItems: [
         {title: 'Home', path: '/', icon: 'home'},
         {title: 'Blog', path: '/Blog', icon: 'assignment'},
         {title: 'Sign In', path: '/Signin', icon: 'face'}
-      ],
-      titleRegister: 'Register',
-      iconRegister: 'group',
-      menuRegister: [
-        {title: 'Student', path: '/RegisterStudent', icon: 'person'},
-        {title: 'Teacher', path: '/RegisterTeacher', icon: 'school'}
       ],
       titleProject: 'Project',
       iconProject: 'content_paste',
