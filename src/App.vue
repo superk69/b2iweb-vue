@@ -62,8 +62,14 @@ export default {
       menuItems: [
         {title: 'Home', path: '/', icon: 'home'},
         {title: 'Blog', path: '/Blog', icon: 'assignment'},
-        {title: 'Sign In', path: '/Signin', icon: 'face'}
+        {title: 'Sign In', path: '/Signin', icon: 'face'},
+        {title: 'Sign Up', path: '/Signup', icon: 'lock_open'}
       ]
+    }
+  },
+  computed: {
+    title () {
+      return this.$store.state.title
     }
   },
   name: 'App'
