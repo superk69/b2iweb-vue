@@ -12,11 +12,11 @@ import firebase from 'firebase'
 Vue.use(Vuetify)
 
 firebase.initializeApp({
-  apiKey: 'AIzaSyAzGeJc89-sbkxICqahAlmX8XShuW8iGBc',
-  authDomain: 'b2iweb-vue.firebaseapp.com',
-  databaseURL: 'https://b2iweb-vue.firebaseio.com',
-  projectId: 'b2iweb-vue',
-  storageBucket: 'b2iweb-vue.appspot.com'
+  apiKey: '
+  authDomain: '
+  databaseURL: '
+  projectId: '
+  storageBucket: '
 })
 
 Vue.config.productionTip = false
