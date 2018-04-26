@@ -6,7 +6,9 @@ const routerOptions = [
   {path: '/Blog', component: 'Blog'},
   {path: '/Signin', component: 'Signin'},
   {path: '/RegisterStudent', component: 'RegisterStudent'},
-  {path: '/RegisterTeacher', component: 'RegisterTeacher'}
+  {path: '/RegisterTeacher', component: 'RegisterTeacher'},
+  {path: '/ProjectOpen', component: 'ProjectOpen'},
+  {path: '/ProjectControl', component: 'ProjectControl'}
 ]
 
 const routes = routerOptions.map(route => {
