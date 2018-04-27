@@ -15,15 +15,15 @@
         </v-list-tile>
 
         <v-list-group
-        prepend-icon="group"
+        :prepend-icon="iconProject"
         no-action
         value="false"
         >
         <v-list-tile slot="activator">
-          <v-list-tile-title>{{titleRegister}}</v-list-tile-title>
+          <v-list-tile-title>{{titleProject}}</v-list-tile-title>
         </v-list-tile>
             <v-list-tile
-              v-for="item in menuRegister" 
+              v-for="item in menuProject" 
               :key="item.title" 
               :to="item.path"
             >
@@ -34,10 +34,16 @@
             </v-list-tile>
         </v-list-group>
         
+
+        <v-list-tile @click="userSignOut" v-if="isAuthenticated">
+          <v-list-tile-action>
+            <v-icon>exit_to_app</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-content>Sign Out</v-list-tile-content>
+        </v-list-tile>
       </v-list>
-
-
     </v-navigation-drawer>
+
     <v-toolbar app >
       <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
       <v-toolbar-title>
@@ -55,15 +61,15 @@
           <v-icon left dark>{{ item.icon }}</v-icon>
           {{ item.title }}
         </v-btn>
-      
+
         <v-menu offset-y>
           <v-btn slot="activator">
-            <v-icon left dark>group</v-icon>
-            {{titleRegister}}
+            <v-icon left dark>{{iconProject}}</v-icon>
+            {{titleProject}}
             <v-icon left dark>keyboard_arrow_down</v-icon>
           </v-btn>
           <v-list>
-            <v-list-tile v-for="item in menuRegister" :key="item.title" :to="item.path">
+            <v-list-tile v-for="item in menuProject" :key="item.title" :to="item.path">
               <v-list-tile-action>
                 <v-icon>{{ item.icon }}</v-icon>      
               </v-list-tile-action>
@@ -76,8 +82,10 @@
           </v-list>
         </v-menu>
 
-
-
+        <v-btn flat @click="userSignOut" v-if="isAuthenticated">
+          <v-icon left>exit_to_app</v-icon>
+            Sign Out
+        </v-btn>
       </v-toolbar-items>
     </v-toolbar>
    
@@ -102,6 +110,7 @@
 </template>
 
 <script>
+/* eslint-disable */
 export default {
   data () {
     return {
@@ -112,11 +121,43 @@ export default {
         {title: 'Blog', path: '/Blog', icon: 'assignment'},
         {title: 'Sign In', path: '/Signin', icon: 'face'}
       ],
-      titleRegister: 'Register',
-      menuRegister: [
-        {title: 'Student', path: '/RegisterStudent', icon: 'person'},
-        {title: 'Teacher', path: '/RegisterTeacher', icon: 'school'}
+      titleProject: 'Project',
+      iconProject: 'content_paste',
+      menuProject: [
+        {title: 'โครงการเปิดรับลงทะเบียน', path: '/ProjectOpen', icon: 'content_copy'},
+        {title: 'โครงการที่กำลังดำเนินการ', path: '/ProjectControl', icon: 'local_library'},
+        {title: 'ประวัติ', path: '/ProjectHistory', icon: 'inbox'}
       ]
+    }
+  },
+  computed: {
+    title () {
+      return this.$store.state.title
+    },
+    drawer () {
+      return this.$store.state.drawer
+    },
+    isAuthenticated () {
+      return this.$store.getters.isAuthenticated
+    },
+    menuItems () {
+      if (this.isAuthenticated) {
+        return [
+          {title: 'Home', path: '/', icon: 'home'},
+          {title: 'Blog', path: '/Blog', icon: 'assignment'}
+        ]
+      } else {
+        return [
+          {title: 'Home', path: '/', icon: 'home'},
+          {title: 'Sign In', path: '/Signin', icon: 'face'},
+          {title: 'Sign Up', path: '/Signup', icon: 'lock_open'}
+        ]
+      }
+    }
+  },
+  methods: {
+    userSignOut () {
+      this.$store.dispatch('userSignOut')
     }
   },
   name: 'App'

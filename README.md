@@ -10,6 +10,8 @@ npm install
 
 npm install --save vuex
 
+npm install --save firebase (for test prototype)
+
 # serve with hot reload at localhost:8080
 npm run dev
 

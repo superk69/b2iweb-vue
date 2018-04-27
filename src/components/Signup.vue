@@ -2,7 +2,7 @@
   <v-container fluid>
     <v-layout row wrap>
       <v-flex xs12 class="text-xs-center" mt-5>
-        <h1>Register Student</h1>
+        <h1>Register</h1>
       </v-flex>
       <v-flex xs12 sm6 offset-sm3 mt-3>
         <v-form v-model="valid" ref="form" lazy-validation>
@@ -69,46 +69,46 @@
 /* eslint-disable */
 import axios from 'axios'
 
-   export default {
-    data: () => ({
-      valid: true,
-      email: '',
-      emailRules: [
-        v => !!v || 'E-mail is required',
-        v => /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'E-mail must be valid'
-      ],
-      password: '',
-      passwordCheck: false,
-      passwordRules: [
-        v => !!v || 'Password is required',
-        v => (v && v.length >= 8) || 'Password must be more than 8 characters'
-      ],
-      confirmPassword: '',
-      confirmPasswordCheck: false,
-      name: '',
-      nameRules: [
-        v => !!v || 'Name is required'
-      ],
-      surname: '',
-      surnameRules: [
-        v => !!v || 'Surname is required'
-      ],
-      school: '',
-      schoolRules: [
-        v => !!v || 'School is required'
-      ]
-
-    }),
-
-    computed: {
-      comparePassword(){
-        return this.password===this.confirmPassword?true:'Password and confirm password don\'t match'
-      }
+export default {
+  data: () => ({
+    valid: true,
+    email: '',
+    emailRules: [
+      v => !!v || 'E-mail is required',
+      v => /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'E-mail must be valid'
+    ],
+    password: '',
+    passwordCheck: false,
+    passwordRules: [
+      v => !!v || 'Password is required',
+      v => (v && v.length >= 8) || 'Password must be more than 8 characters'
+    ],
+    confirmPassword: '',
+    confirmPasswordCheck: false,
+    name: '',
+    nameRules: [
+      v => !!v || 'Name is required'
+    ],
+    surname: '',
+    surnameRules: [
+      v => !!v || 'Surname is required'
+    ],
+    school: '',
+    schoolRules: [
+      v => !!v || 'School is required'
+    ]
+  }),
+  computed: {
+    comparePassword(){
+      return this.password===this.confirmPassword?true:'Password and confirm password don\'t match'
     },
-
-    methods: {
-      submit () {
-        if (this.$refs.form.validate()) {
+    error () {
+        return this.$store.state.loading
+    }
+  }, 
+  methods: {
+    submit () {
+      if (this.$refs.form.validate()) {
           // Native form submission is not yet supported
           // axios.post('/api/submit', {
           //   email: this.email,
@@ -116,13 +116,26 @@ import axios from 'axios'
           //   name: this.name,
           //   surname: this.surname,
           //   school: this.school,
-          //   rold: 'student'
+          //   rold: 'teacher'
           // })
-        }
-      },
-      clear () {
-        this.$refs.form.reset()
+        this.$store.dispatch('userSignUp', { email: this.email, password: this.password, name: this.name, surname: this.surname, school: this.school, roId: 'teacher'})
+      }
+    },
+    clear () {
+      this.$refs.form.reset()
+    }
+  },
+  watch: {
+    error (value) {
+      if (value) {
+        this.alert = true
+      }
+    },
+    alert (value) {
+      if (!value) {
+        this.$store.commit('setError', null)
       }
     }
   }
+}
 </script>
