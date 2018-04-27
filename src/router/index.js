@@ -4,7 +4,10 @@ import firebase from 'firebase'
 
 const routerOptions = [
   {path: '/', component: 'HelloWorld'},
-  { path: '/Blog', component: 'Blog', meta: { requiresAuth: true } },
+  { path: '/Blog', component: 'Blog' },
+  { path: '/ManageTeam', component: 'ManageTeam', meta: { requiresAuth: true } },
+  { path: '/Create', component: 'Create', meta: { requiresAuth: true } },
+  { path: '/Statistic', component: 'Statistic', meta: { requiresAuth: true } },
   {path: '/Signin', component: 'Signin'},
   {path: '/Signup', component: 'Signup'},
   {path: '*', component: 'NotFound'}

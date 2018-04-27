@@ -1,29 +1,6 @@
 <template>
   <v-app>
-    <v-navigation-drawer v-model="drawer" app>
-      <!-- action menu  -->
-      <v-list>
-
-        <v-list-tile
-          v-for="item in menuItems"
-          :key="item.title"
-          :to="item.path">
-          <v-list-tile-action>
-            <v-icon>{{ item.icon }}</v-icon>
-          </v-list-tile-action>
-          <v-list-tile-content>{{ item.title }}</v-list-tile-content>
-        </v-list-tile>
-        <v-list-tile @click="userSignOut" v-if="isAuthenticated">
-          <v-list-tile-action>
-            <v-icon>exit_to_app</v-icon>
-          </v-list-tile-action>
-          <v-list-tile-content>Sign Out</v-list-tile-content>
-        </v-list-tile>
-      </v-list>
-    </v-navigation-drawer>
-
     <v-toolbar app >
-      <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
       <v-toolbar-title>
         <router-link to="/" tag="span" style="cursor: pointer">
           {{ title }}
@@ -39,6 +16,7 @@
           <v-icon left dark>{{ item.icon }}</v-icon>
           {{ item.title }}
         </v-btn>
+        
         <v-btn flat @click="userSignOut" v-if="isAuthenticated">
           <v-icon left>exit_to_app</v-icon>
             Sign Out
@@ -68,11 +46,6 @@
 
 <script>
 export default {
-  data () {
-    return {
-      drawer: false
-    }
-  },
   computed: {
     title () {
       return this.$store.state.title
@@ -80,18 +53,34 @@ export default {
     drawer () {
       return this.$store.state.drawer
     },
+    roId () {
+      return this.$store.state.roId
+    },
     isAuthenticated () {
       return this.$store.getters.isAuthenticated
     },
     menuItems () {
       if (this.isAuthenticated) {
-        return [
-          {title: 'Home', path: '/', icon: 'home'},
-          {title: 'Blog', path: '/Blog', icon: 'assignment'}
-        ]
+        if (this.roId === 'teacher') {
+          return [
+            {title: 'News', path: '/Blog', icon: 'assign'},
+            {title: 'CreateTeam', path: '/Create', icon: 'build'},
+            {title: 'ManageTeam', path: '/ManageTeam', icon: 'face'}
+          ]
+        } else if (this.roId === 'student') {
+          return [
+            {title: 'News', path: '/Blog', icon: 'assign'},
+            {title: 'ManageTeam', path: '/ManageTeam', icon: 'face'}
+          ]
+        } else if (this.roId === 'admin') {
+          return [
+            {title: 'News', path: '/Blog', icon: 'assign'},
+            {title: 'Statistic', path: '/Statistic', icon: 'poll'}
+          ]
+        }
       } else {
         return [
-          {title: 'Home', path: '/', icon: 'home'},
+            {title: 'News', path: '/Blog', icon: 'assign'},
           {title: 'Sign In', path: '/Signin', icon: 'face'},
           {title: 'Sign Up', path: '/Signup', icon: 'lock_open'}
         ]

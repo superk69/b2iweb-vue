@@ -11,6 +11,7 @@ export const store = new Vuex.Store({
     title: 'Bridgestone 2 Inventors',
     drawer: false,
     user: null,
+    roId: '',
     error: null,
     loading: false
   },
@@ -23,14 +24,18 @@ export const store = new Vuex.Store({
     },
     setLoading (state, payload) {
       state.loading = payload
+    },
+    setRoId (state, payload) {
+      state.roId = payload
     }
   },
   actions: {
     userSignUp ({commit}, payload) {
       commit('setLoading', true)
       firebase.auth().createUserWithEmailAndPassword(payload.email, payload.password).then(firebaseUser => {
-    //    commit('setUser', {email: firebaseUser.email})
-        commit('setUser', {email: firebaseUser.email, name: firebaseUser.name, surname: firebaseUser.surname, school: firebaseUser.school, roId: 'teacher'})
+        commit('setUser', {email: firebaseUser.email})
+    //    commit('setUser', {email: firebaseUser.email, name: firebaseUser.name, surname: firebaseUser.surname, school: firebaseUser.school, roId: 'teacher'})
+        commit('setRoId', 'teacher')
         // have to save to database too
         commit('setLoading', false)
         router.push('/')
