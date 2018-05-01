@@ -1,16 +1,19 @@
+/* eslint-disable */
 import Vue from 'vue'
 import Router from 'vue-router'
 import firebase from 'firebase'
 
 const routerOptions = [
-  {path: '/', component: 'HelloWorld'},
-  { path: '/Blog', component: 'Blog', meta: { requiresAuth: true } },
-  {path: '/RegisterStudent', component: 'RegisterStudent'},
-  {path: '/RegisterTeacher', component: 'RegisterTeacher'},
-  {path: '/ProjectOpen', component: 'ProjectOpen'},
-  {path: '/ProjectControl', component: 'ProjectControl'},
+  {path: '/', component: 'Home'},
+  {path: '/Profile', component: 'Profile'},
+  {path: '/Register', component: 'Register'},
   {path: '/Signin', component: 'Signin'},
   {path: '/Signup', component: 'Signup'},
+  {path: '/ManageTeam', component: 'manage/ManageTeam'},
+  {path: '/ProjectList', component: 'manage/ProjectList'},
+  {path: '/ManageProject', component: 'admin/ManageProject'},
+  {path: '/ManageNews', component: 'admin/ManageNews'},
+  {path: '/ProjectSend', component: 'admin/ProjectSend'},
   {path: '*', component: 'NotFound'}
 ]
 
@@ -28,14 +31,14 @@ const router = new Router({
   routes
 })
 
-router.beforeEach((to, from, next) => {
-  const requiresAuth = to.matched.some(record => record.meta.requiresAuth)
-  const isAuthenticated = firebase.auth().currentUser
-  if (requiresAuth && !isAuthenticated) {
-    next('/Signin')
-  } else {
-    next()
-  }
-})
+// router.beforeEach((to, from, next) => {
+//   const requiresAuth = to.matched.some(record => record.meta.requiresAuth)
+//   const isAuthenticated = firebase.auth().currentUser
+//   if (requiresAuth && !isAuthenticated) {
+//     next('/Signin')
+//   } else {
+//     next()
+//   }
+// })
 
 export default router

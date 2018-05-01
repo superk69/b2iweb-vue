@@ -1,10 +1,10 @@
 <template>
-  <v-container fluid>
+  <v-container fluid mb-5>
     <v-layout row wrap>
-      <v-flex xs12 class="text-xs-center" mt-5>
-        <h1>Sign In</h1>
+      <v-flex xs12 class="text-xs-center">
+        <h1>Register</h1>
       </v-flex>
-      <v-flex xs12 sm6 offset-sm3 mt-3 pa-5 class="grey lighten-2">
+      <v-flex xs12 sm6 offset-sm3 mt-5 pa-5 class="grey lighten-2">
         <v-form v-model="valid" ref="form" lazy-validation>
           <v-text-field
             label="E-mail"
@@ -22,9 +22,39 @@
             :rules="passwordRules"
             required
           ></v-text-field>
+          <v-text-field
+            label="Confirm Password"
+            v-model="confirmPassword"
+            :append-icon="confirmPasswordCheck ? 'visibility' : 'visibility_off'"
+            :append-icon-cb="() => (confirmPasswordCheck = !confirmPasswordCheck)"
+            :type="confirmPasswordCheck ? 'text' : 'password'"
+            :rules="[comparePassword]"
+            required
+          ></v-text-field>
+
+          <v-text-field
+            label="Name"
+            v-model="name"
+            :rules="nameRules"
+            required
+          ></v-text-field>
+
+          <v-text-field
+            label="Surname"
+            v-model="surname"
+            :rules="surnameRules"
+            required
+          ></v-text-field>
+
+          <v-text-field
+            label="School(University)"
+            v-model="school"
+            :rules="schoolRules"
+            required
+          ></v-text-field>
 
           <v-flex class="text-xs-center" mt-5>
-            <v-btn color="info"  @click="submit">Sign in</v-btn>
+            <v-btn color="info"  @click="submit">Register</v-btn>
             <v-btn color="error" @click="clear">clear</v-btn>
           </v-flex>
           
@@ -52,6 +82,20 @@ export default {
     passwordRules: [
       v => !!v || 'Password is required',
       v => (v && v.length >= 8) || 'Password must be more than 8 characters'
+    ],
+    confirmPassword: '',
+    confirmPasswordCheck: false,
+    name: '',
+    nameRules: [
+      v => !!v || 'Name is required'
+    ],
+    surname: '',
+    surnameRules: [
+      v => !!v || 'Surname is required'
+    ],
+    school: '',
+    schoolRules: [
+      v => !!v || 'School is required'
     ]
   }),
   computed: {
