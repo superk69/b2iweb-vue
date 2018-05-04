@@ -5,10 +5,10 @@
         <h1>Manage Team</h1>
       </v-flex>
       <v-flex xs12 sm10 offset-sm1 mt-3>
-
         <v-card>
             <v-card-title>
               รายการโครงงานที่ส่งเข้าประกวดแข่งขัน
+              <v-btn to="/CreateTeam" color="success" round small ><v-icon>add</v-icon>create</v-btn>
               <v-spacer></v-spacer>
               <v-text-field
                 append-icon="search"
@@ -30,14 +30,14 @@
                 <td class="text-xs-left">{{ props.item.student }}</td>
                 <td class="text-xs-left">{{ props.item.status }}</td>
                 <td class="text-xs-left">
-                  <v-btn color="warning" round small ><v-icon left>create</v-icon>Edit</v-btn>
+                  <v-btn color="warning" round small ><v-icon>create</v-icon>Edit</v-btn>
                 </td>
               </template>
               <v-alert slot="no-results" :value="true" color="error" icon="warning">
                 Your search for "{{ search }}" found no results.
               </v-alert>
-            </v-data-table>
-          </v-card>
+          </v-data-table>
+        </v-card>
 
       </v-flex>
     </v-layout>
