@@ -30,7 +30,7 @@
                 <td class="text-xs-left">{{ props.item.student }}</td>
                 <td class="text-xs-left">{{ props.item.status }}</td>
                 <td class="text-xs-left">
-                  <v-btn color="warning" round small ><v-icon>create</v-icon>Edit</v-btn>
+                  <v-btn color="warning" to="/createTeam" round small ><v-icon>create</v-icon>Edit</v-btn>
                 </td>
               </template>
               <v-alert slot="no-results" :value="true" color="error" icon="warning">
