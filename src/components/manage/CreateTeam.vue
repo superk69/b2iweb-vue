@@ -4,7 +4,7 @@
       <v-flex xs12 class="text-xs-center">
         <h1>Create Team</h1>
       </v-flex>
-      <v-flex xs12 sm10 offset-sm1 mt-3 pa-5 class="grey lighten-2">
+      <v-flex xs12 sm10 offset-sm1 mt-3 pa-5 class="grey lighten-4">
         
         <v-layout row>
           <v-flex xs2>
@@ -122,7 +122,7 @@
              close 
              label>
                 {{item.name}}
-             </v-chip>
+            </v-chip>
 
 
             <!--  upload document -->
@@ -180,6 +180,7 @@
         projectName: '',
         projectList: ['โครงการปีพัฒนาการศึกษา 2018', 'โครงการศึกษาผู้เรียน', 'โครงการ สสวท.'],
         teacherData:{
+          id: 123,
           email: 'TProjectTest@gmail.com',
           name: 'ปรีชา',
           surname: 'แสนดี',
