@@ -68,8 +68,7 @@
                     <h3>{{ project.projectName }}</h3>
                   </v-flex>
                 </v-layout>
-
-                
+             
                 <v-layout row mb-2>
                   <v-flex xs2>
                     <p>หัวข้อส่งเข้าประกวด</p>
@@ -110,7 +109,6 @@
                     </p>
                   </v-flex>
                 </v-layout>
-
 
 
 
@@ -181,11 +179,10 @@
                   
                   <v-flex xs10>
 
-                    <v-layout row >
-
+                    <v-layout column >
                        <v-card>
                         <v-container fluid grid-list-md>
-                          <v-layout row wrap>
+                          <v-layout>
                             <v-flex
                               v-for="card in step2.imageData"
                               v-bind="{ [`xs${card.flex}`]: true }"
@@ -196,20 +193,11 @@
                                   :src="card.src"
                                   height="200px"
                                 >
-                                  <v-container fill-height fluid>
-                                    <v-layout fill-height>
-                                      <v-flex xs12 align-end flexbox>
-                                        <span class="headline white--text" v-text="card.title"></span>
-                                      </v-flex>
-                                    </v-layout>
-                                  </v-container>
                                 </v-card-media>
                                 <v-card-actions>
                                   <v-spacer></v-spacer>
-                                  <v-btn icon></v-btn>
-                                  <v-btn icon></v-btn>
-                                  <v-btn icon>
-                                    <v-icon>favorite</v-icon>
+                                  <v-btn color="error" icon @click="deleteImg(card)">
+                                    <v-icon>block</v-icon>
                                   </v-btn>
                                 </v-card-actions>
                               </v-card>
@@ -237,11 +225,102 @@
             </v-stepper-content>
 
             <v-stepper-content step="3">
-              xxx3
+              
+              <v-flex mb-3>
+                <v-alert v-if="step3.result==='pass'" :value="true" type="success">
+                  {{ step3.resultMessage }}
+                </v-alert>
+                <v-alert v-if="step3.result==='fail'" :value="true" type="error">
+                  {{ step3.resultMessage }}
+                </v-alert>
+              </v-flex>
+
+
+
+              <v-card>
+                <v-card-title>
+                  <h2>ประกาศผลทีมผ่านการคัดเลือก</h2>
+                  <v-spacer></v-spacer>
+                  <v-text-field
+                    append-icon="search"
+                    label="Search"
+                    single-line
+                    hide-details
+                    v-model="step3.search"
+                    ></v-text-field>
+                  </v-card-title>
+                  <v-data-table
+                    :headers="step3.headers"
+                    :items="step3.projectRank"
+                    :search="step3.search"
+                  >
+                    <template slot="items" slot-scope="props">
+                      <td class="text-xs-left">{{ props.item.projectName }}</td>
+                      <td class="text-xs-left">{{ props.item.school }}</td>
+                      <td class="text-xs-left">
+                        
+                        <v-chip v-if="props.item.status=='pass'" color="green" text-color="white">
+                          <v-avatar class="green darken-4">
+                            <v-icon>check_circle_outline</v-icon>
+                          </v-avatar>
+                          Pass
+                        </v-chip>
+                        <v-chip v-else-if="props.item.status=='fail'" color="red" text-color="white">
+                          <v-avatar class="red darken-4">
+                            <v-icon>check_circle_outline</v-icon>
+                          </v-avatar>
+                          Fail
+                        </v-chip>
+                        <v-chip v-else color="orange" text-color="white">
+                          <v-avatar class="orange darken-4">
+                            <v-icon>check_circle_outline</v-icon>
+                          </v-avatar>
+                          Wait
+                        </v-chip>
+
+
+                      </td>
+                    </template>
+                    <v-alert slot="no-results" :value="true" color="error" icon="warning">
+                      Your search for "{{ step3.search }}" found no results.
+                    </v-alert>
+                </v-data-table>
+              </v-card>
+
+
+
             </v-stepper-content>
 
             <v-stepper-content step="4">
-              xxx4
+              
+              <v-card>
+                  <v-card-title>
+                    <h2>ประกาศผลการแข่งขัน</h2>
+                    <v-spacer></v-spacer>
+                    <v-text-field
+                      append-icon="search"
+                      label="Search"
+                      single-line
+                      hide-details
+                      v-model="step4.search"
+                    ></v-text-field>
+                  </v-card-title>
+                  <v-data-table
+                    :headers="step4.headers"
+                    :items="step4.projectRank"
+                    :search="step4.search"
+                  >
+                    <template slot="items" slot-scope="props">
+                      <td>{{ props.item.rank }}</td>
+                      <td class="text-xs-left">{{ props.item.projectName }}</td>
+                      <td class="text-xs-left">{{ props.item.school }}</td>
+                    </template>
+                    <v-alert slot="no-results" :value="true" color="error" icon="warning">
+                      Your search for "{{ step4.search }}" found no results.
+                    </v-alert>
+                </v-data-table>
+              </v-card>
+
             </v-stepper-content>
 
           </v-stepper-items>
@@ -262,8 +341,8 @@
   export default {
     data () {
       return {
-         stepSet: 2, //step set
-         stepIndex: 2, //step click
+         stepSet: 4, //step set
+         stepIndex: 4, //step click
          project: {
            projectId: 1,
            projectName: 'Bridge Stone 2 Inventors',
@@ -302,17 +381,47 @@
             {name: 'ขั้นตอนการปฏิบัติ', path: '/'}
           ],
           imageData:[
-            { title: '', src: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS3FL2gZkq9wT_LuwQYCDTEpj7BXe1oVCS8YGuTT9C4Xt8sySgs1A', flex: 4 },
-            { title: '', src: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS3FL2gZkq9wT_LuwQYCDTEpj7BXe1oVCS8YGuTT9C4Xt8sySgs1A', flex: 4 },
-            { title: '', src: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS3FL2gZkq9wT_LuwQYCDTEpj7BXe1oVCS8YGuTT9C4Xt8sySgs1A', flex: 4 }
+            { title: 'img', src: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS3FL2gZkq9wT_LuwQYCDTEpj7BXe1oVCS8YGuTT9C4Xt8sySgs1A', flex: 4 },
+            { title: 'img', src: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS3FL2gZkq9wT_LuwQYCDTEpj7BXe1oVCS8YGuTT9C4Xt8sySgs1A', flex: 4 },
+            { title: 'img', src: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS3FL2gZkq9wT_LuwQYCDTEpj7BXe1oVCS8YGuTT9C4Xt8sySgs1A', flex: 4 }
           ]
 
          },
          step3:{
-          title: 'Present'          
+          title: 'Present',  
+          result: 'pass',//pass , fail , ....
+          resultMessage:'หัวข้อได้ผ่านการตรวจสอบจากคณะกรรมแล้วให้ผ่านเข้าสู่รอบการนำเสนอโครงการ',
+          search:'',     
+          headers: [
+            { text: 'หัวข้อส่งเข้าประกวด', value: 'name'},
+            { text: 'โรงเรียน', value: 'school'},
+            { text: 'ผลการตรวจสอบ', value: 'status'},
+          ],
+          projectRank:[
+            {id:23, projectName: "โครงการรถไฟฟ้า" ,school: "โรงเรียนบ้านนามน" ,status: 'fail'},
+            {id:25, projectName: "โครงการดอกไม้จากกระดาษ" ,school: "โรงเรียนบ้านหนองแสง" , status: 'pass'},
+            {id:64, projectName: "โครงการผักตบชวาสร้างไฟฟ้า" , school: "โรงเรียนบ้านม่วงสามสิบ" , status: 'wait'},
+            {id:36, projectName: "โครงการเครื่องบำบัดน้ำด้วยต้นกก" , school: "โรงเรียนบ้านบ้านศรีไคร" , status: 'pass'},
+            {id:85798, projectName: "โครงการโปรแกรมหุ้นยนต์ขุดดิน" , school: "โรงเรียนบ้านมาเมือง" , status: 'fail'},
+            {id:5848, projectName: "โครงการหุ่นยนต์ชำระเงิน" , school: "โรงเรียนบ้านบ้านดอน" , status: 'pass'}
+          ]     
          },
          step4:{
-          title: 'Announce'            
+          search: '',
+          title: 'Announce',
+          headers: [
+            { text: 'อันดับที่', value: 'rank', align: 'left', sortable: false},
+            { text: 'หัวข้อส่งเข้าประกวด', value: 'name', sortable:false },
+            { text: 'โรงเรียน', value: 'school', sortable:false },
+          ],
+          projectRank:[
+            {id:23, rank: 'ชนะเลิศ' , projectName: "โครงการรถไฟฟ้า" ,school: "โรงเรียนบ้านนามน"},
+            {id:25, rank: 'รองชนะเลิศอันดับที่ 1' , projectName: "โครงการดอกไม้จากกระดาษ" ,school: "โรงเรียนบ้านหนองแสง"},
+            {id:64, rank: 'รองชนะเลิศอันดับที่ 2' , projectName: "โครงการผักตบชวาสร้างไฟฟ้า" , school: "โรงเรียนบ้านม่วงสามสิบ"},
+            {id:36, rank: 'ชมเชย 1' , projectName: "โครงการเครื่องบำบัดน้ำด้วยต้นกก" , school: "โรงเรียนบ้านบ้านศรีไคร"},
+            {id:85798, rank: 'ชมเชย 2' , projectName: "โครงการโปรแกรมหุ้นยนต์ขุดดิน" , school: "โรงเรียนบ้านมาเมือง"},
+            {id:5848, rank: 'ชมเชย 3' , projectName: "โครงการหุ่นยนต์ชำระเงิน" , school: "โรงเรียนบ้านบ้านดอน"}
+          ]           
          }
       }
     },
@@ -320,6 +429,10 @@
       deleteDoc(item){
         this.step2.documentData.splice(this.step2.documentData.indexOf(item), 1)
         this.step2.documentData = [...this.step2.documentData]
+      },
+      deleteImg(item){
+        this.step2.imageData.splice(this.step2.imageData.indexOf(item), 1)
+        this.step2.imageData = [...this.step2.imageData]
       }
     }
   }
