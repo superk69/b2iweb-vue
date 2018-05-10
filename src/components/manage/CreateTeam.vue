@@ -111,53 +111,6 @@
         </v-layout>   
 
         <v-layout row>
-          <v-flex xs2>
-            <v-subheader>เอกสารการสมัคร</v-subheader>
-          </v-flex>
-          <v-flex xs10>
-            <v-chip
-             v-for="item in documentData"
-             :key="item.name"
-             @input="deleteDoc(item)"
-             close 
-             label>
-                {{item.name}}
-            </v-chip>
-
-
-            <!--  upload document -->
-            <v-layout row>
-              <v-chip outline color="blue" small>
-                  <v-icon>attachment</v-icon>Upload
-                </v-chip>
-            </v-layout>
-
-
-
-          </v-flex>
-        </v-layout> 
-
-
-        <v-layout row>
-          <v-flex xs2>
-            <v-subheader>ภาพประกอบการสมัคร</v-subheader>
-          </v-flex>
-          <v-flex xs10>
-
-
-            <!--  upload image -->
-            <v-layout row>
-              <v-chip outline color="red" small>
-                  <v-icon>file_upload</v-icon>Upload
-                </v-chip>
-            </v-layout>
-
-
-
-          </v-flex>
-        </v-layout> 
-
-        <v-layout row>
           <v-flex xs12 class="text-xs-center">
             <v-btn round color="primary" dark small>Save</v-btn>
             <v-btn round color="error" dark small>Clear</v-btn>
@@ -205,11 +158,6 @@
           {value: false,name: 'น.ส.สมศรี',surname: 'สมใจ', email: 'SOMS@gmail.com' , school: 'UBU' , id: 5 },
           {value: false,name: 'นายบุญเติม',surname: 'กล้าหาญ', email: 'BT@gmail.com' , school: 'UBU' , id: 6 },
           {value: false,name: 'น.ส.ฤดี',surname: 'ทำดี', email: 'AADEE@gmail.com' , school: 'UBU' , id: 7 }
-        ],
-        documentData:[
-          {name: 'เอกสารลงทะเบียน', path: '/doc/124552.pdf'},
-          {name: 'เอกสารสมาชิก', path: '/doc/124552.pdf'},
-          {name: 'เอกสารประกอบ', path: '/doc/124552.pdf'}
         ]
       }
     },
@@ -222,11 +170,7 @@
         this.dialogSelectStudent = false;
         this.studentData.push({id: item.id, email: item.email,name: item.name,surname: item.surname, school: item.school});
         this.studentData = [...this.studentData]
-      },
-      deleteDoc(item){
-        this.documentData.splice(this.documentData.indexOf(item), 1)
-        this.documentData = [...this.documentData]
-      },
+      }
     }
   }
 </script>
