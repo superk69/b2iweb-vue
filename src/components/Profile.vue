@@ -91,7 +91,7 @@
               </v-btn>
               <v-btn v-else round color="success" @click="edit=!edit" dark>
                 <v-icon left>save</v-icon>
-                Edit
+                Save
               </v-btn>
             </v-flex>
           </v-layout>
