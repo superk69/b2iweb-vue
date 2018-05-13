@@ -14,6 +14,7 @@ const routerOptions = [
   {path: '/ProjectList', component: 'manage/ProjectList'},
   {path: '/ProjectManage', component: 'manage/ProjectManage'},
   {path: '/ManageUser', component: 'admin/ManageUser'},
+  {path: '/ManageUserEdit', component: 'admin/ManageUserEdit'},
   {path: '/ManageProject', component: 'admin/ManageProject'},
   {path: '/ManageNews', component: 'admin/ManageNews'},
   {path: '/ProjectSend', component: 'admin/ProjectSend'},

@@ -2,7 +2,7 @@
   <v-container fluid mb-5>
     <v-layout row wrap>
       <v-flex xs12 class="text-xs-center">
-        <h1>Manage Project</h1>
+        <h1>Manage User</h1>
       </v-flex>
       <v-flex xs12 sm10 offset-sm1 mt-3 pa-5 class="grey lighten-4">
         
@@ -28,7 +28,7 @@
               <td class="text-xs-left">{{ props.item.email }}</td>
               <td class="text-xs-left">{{ props.item.school }}</td>
               <td class="text-xs-left">
-                <v-btn color="orange" round dark><v-icon left>edit</v-icon>Edit</v-btn>
+                <v-btn color="orange" to="/ManageUserEdit" round dark><v-icon left>edit</v-icon>Edit</v-btn>
               </td>
             </template>
             <v-alert slot="no-results" :value="true" color="error" icon="warning">
