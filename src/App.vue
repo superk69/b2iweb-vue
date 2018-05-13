@@ -82,7 +82,6 @@ export default {
         {title: 'Profile(All)', path: '/Profile', icon: 'account_circle'},
         {title: 'Manage Teams(Student,Teacher)', path: '/ManageTeam', icon: 'build'},
         {title: 'Project List(Student,Teacher)', path: '/ProjectList', icon: 'assignment'},
-
         {title: 'Manage User(Admin)', path: '/ManageUser', icon: 'group_add'},
         {title: 'Manage Team(Admin)', path: '/ManageTeams', icon: 'group_add'},
         {title: 'Manage Project(Admin)', path: '/ManageProject', icon: 'playlist_add_check'},
