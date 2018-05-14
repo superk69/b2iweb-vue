@@ -32,7 +32,7 @@
       <v-toolbar-items class="hidden-xs-only">
         <v-btn
           flat
-          v-for="item in mainMenu"
+          v-for="item in menuHeader"
           :key="item.title"
           :to="item.path">
           <v-icon left dark>{{ item.icon }}</v-icon>
@@ -71,23 +71,8 @@ export default {
     return {
       drawer: true,
       title: 'Bridge Stone 2 Inventors',
-      mainMenu: [
-        {title: 'Home', path: '/', icon: 'home'},
-        {title: 'Blog', path: '/Blog', icon: 'assignment'},
-        {title: 'Register', path: '/Register', icon: 'person_add'},
-        {title: 'Sign In', path: '/Signin', icon: 'face'},
-        {title: 'sign Out', path: '/Signout', icon: 'exit_to_app'}
-      ],
-      subMenu: [
-        {title: 'Profile(All)', path: '/Profile', icon: 'account_circle'},
-        {title: 'Manage Teams(Student,Teacher)', path: '/ManageTeam', icon: 'build'},
-        {title: 'Project List(Student,Teacher)', path: '/ProjectList', icon: 'assignment'},
-        {title: 'Manage User(Admin)', path: '/ManageUser', icon: 'group_add'},
-        {title: 'Manage Team(Admin)', path: '/ManageTeams', icon: 'group_add'},
-        {title: 'Manage Project(Admin)', path: '/ManageProject', icon: 'playlist_add_check'},
-        {title: 'Manage News(Admin)', path: '/ManageNews', icon: 'playlist_add'},
-        // {title: 'Project Send(Admin)', path: '/ProjectSend', icon: 'reorder'}
-      ]
+      menuHeader: this.$store.state.menuHeader,
+      subMenu: this.$store.state.menuLeft
     }
   }
   

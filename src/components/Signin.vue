@@ -62,15 +62,7 @@ export default {
   methods: {
     submit () {
       if (this.$refs.form.validate()) {
-          // Native form submission is not yet supported
-          // axios.post('/api/submit', {
-          //   email: this.email,
-          //   password: this.password,
-          //   name: this.name,
-          //   surname: this.surname,
-          //   school: this.school,
-          //   rold: 'teacher'
-          // })
+        this.$store.commit('logIn',{email:this.email,password:this.password});
       }
     },
     clear () {
