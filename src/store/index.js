@@ -44,11 +44,10 @@ const mutations = {
       password: input.password,
     })
     .then(response =>{
-      console.log(response.data)
+      //console.log(response.data)
       //this.$set(state.userLogin,response.data)
-      state.userLogin.name =  respones.data.name
-      //console.log(state.userLogin)
-      return state.userLogin
+      this.state.userLogin.name =  respones.data.name
+      console.log(state.userLogin)
     })
     .catch(e =>{
       state.errors.push(e)
