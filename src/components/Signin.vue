@@ -54,15 +54,16 @@ export default {
       v => (v && v.length >= 8) || 'Password must be more than 8 characters'
     ]
   }),
+
   computed: {
-    comparePassword(){
-      return this.password===this.confirmPassword?true:'Password and confirm password don\'t match'
-    }
-  }, 
+
+  },
+
+
   methods: {
     submit () {
       if (this.$refs.form.validate()) {
-        this.$store.commit('logIn',{email:this.email,password:this.password});
+        this.$store.dispatch('acLogIn',{email:this.email,password:this.password});
       }
     },
     clear () {

@@ -2,14 +2,14 @@
   <v-app>
     
     <!-- sub menu  -->
-    <v-navigation-drawer 
+    <v-navigation-drawer v-if="this.$store.state.isLogin"
       clipped
       fixed
       v-model="drawer" app
       >
       <v-list dense>
         <v-list-tile
-          v-for="item in subMenu"
+          v-for="item in this.$store.state.menuLeft"
           :key="item.title"
           :to="item.path">
           <v-list-tile-action>
@@ -17,6 +17,7 @@
           </v-list-tile-action>
           <v-list-tile-content>{{ item.title }}</v-list-tile-content>
         </v-list-tile>
+
       </v-list>
     </v-navigation-drawer> <!-- end sub menu -->
 
@@ -32,12 +33,21 @@
       <v-toolbar-items class="hidden-xs-only">
         <v-btn
           flat
-          v-for="item in menuHeader"
+          v-for="item in this.$store.state.menuHeader"
           :key="item.title"
           :to="item.path">
           <v-icon left dark>{{ item.icon }}</v-icon>
           {{ item.title }}
         </v-btn>
+
+
+        <!-- log out  -->
+        <v-btn flat v-if="this.$store.state.isLogin" @click="signOut" >
+          <v-icon left dark>exit_to_app</v-icon>
+          sign Out
+        </v-btn>
+
+
       </v-toolbar-items>
     </v-toolbar> <!-- end main menu -->
    
@@ -71,10 +81,16 @@ export default {
     return {
       drawer: true,
       title: 'Bridge Stone 2 Inventors',
-      menuHeader: this.$store.state.menuHeader,
-      subMenu: this.$store.state.menuLeft
+    }
+  },
+
+  methods: {
+    signOut () {
+      this.$store.dispatch('acLogOut','');
     }
   }
+
+  
   
 }
 </script>
