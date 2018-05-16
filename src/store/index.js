@@ -14,6 +14,7 @@ Vue.use(Vuex)
 //https://medium.com/@takkamonpob/vue2-0-vuex-%E0%B8%AB%E0%B8%A1%E0%B8%94%E0%B8%9B%E0%B8%B1%E0%B8%8D%E0%B8%AB%E0%B8%B2%E0%B9%80%E0%B8%A3%E0%B8%B7%E0%B9%88%E0%B8%AD%E0%B8%87%E0%B8%95%E0%B8%B1%E0%B8%A7%E0%B9%81%E0%B8%9B%E0%B8%A3-e710a3be6592
 const state = {
   isLogin: false,
+  clickLogin: false,
   errors: '',
   userLogin: {},
   menuHeader: [
@@ -22,22 +23,20 @@ const state = {
     {title: 'Register', path: '/Register', icon: 'person_add'},
     {title: 'Sign In', path: '/Signin', icon: 'face'},
   ],
-  menuLeft: []
+  menuLeft: [],
+  projects: []
 }
 
 const mutations = {
 
   mulLogIn:(state, input)=>{
+    //console.log(input);
     var checkRole = 'student' //student admin user
-    if(input.id==1){
-      checkRole = 'teacher'
-    }else if(input.id==3){
-      checkRole = 'admin'
-    }
     
-    var checkLogin = true;
+    var checkLogin = input.length>0
     if(checkLogin){
-
+      input = input[0]
+      checkRole = input.role
       state.isLogin= true
       state.userLogin = {
         id: input.id,
@@ -75,9 +74,11 @@ const mutations = {
           {title: 'Project List(Student,Teacher)', path: '/ProjectList', icon: 'assignment'},
         ]
       }
-
+      state.clickLogin = false
       router.push({name: '/'})
 
+    }else{
+      state.clickLogin = true
     }
     
     
@@ -96,7 +97,16 @@ const mutations = {
       {title: 'Sign In', path: '/Signin', icon: 'face'},
     ]
     state.menuLeft= []
+    state.projects= []
     router.push({name: '/'})
+  },
+
+
+  mulSetProject:(state,input)=>{
+    input.forEach(element => {
+      //console.log(element);
+      state.projects.push(element)
+    });
   }
 
 
@@ -109,18 +119,30 @@ const getters = {
 const actions = {
 
   acLogIn: (state,input)=>{
-    var url = 'https://my-json-server.typicode.com/superk69/myjsonserver/user/2';
-    if(input.email=='t@gmail.com'){
-      url = 'https://my-json-server.typicode.com/superk69/myjsonserver/user/1';
-    }else if(input.email=='a@gmail.com'){
-      url = 'https://my-json-server.typicode.com/superk69/myjsonserver/user/3';
-    }
+    var url = 'http://localhost:3000/user';
     axios.get(url, {
-      email: input.email,
-      password: input.password,
+      params: {
+        email: input.email,
+        password: input.password,
+      }
     })
     .then(response =>{
-      store.commit('mulLogIn',response.data)
+      store.commit('mulLogIn',response.data)   
+      if(response.data.length>0){
+        var url_project_by_id ='http://localhost:3000/project';
+        axios.get(url_project_by_id, {
+          params: {
+            // email: input.email,
+            // password: input.password,
+          }
+        })
+        .then(response =>{
+          store.commit('mulSetProject',response.data);
+        })
+        .catch(e =>{
+          state.errors = e
+        })
+      }//end if 
     })
     .catch(e =>{
       state.errors = e

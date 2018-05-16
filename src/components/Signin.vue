@@ -24,6 +24,7 @@
           ></v-text-field>
 
           <v-flex class="text-xs-center" mt-5>
+            <p v-if="this.$store.state.clickLogin" class="red--text"> Login fail.. Plesas Check E-mail or Password</p>
             <v-btn color="info"  @click="submit">Sign in</v-btn>
             <v-btn color="error" @click="clear">clear</v-btn>
           </v-flex>
@@ -37,8 +38,6 @@
 
 <script>
 /* eslint-disable */
-import axios from 'axios'
-
 export default {
   data: () => ({
     valid: true,
@@ -56,7 +55,6 @@ export default {
   }),
 
   computed: {
-
   },
 
 
