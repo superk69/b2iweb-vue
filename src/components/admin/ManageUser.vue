@@ -24,11 +24,14 @@
             :search="search"
           >
             <template slot="items" slot-scope="props">
-              <td class="text-xs-left">{{ props.item.name }}</td>
-              <td class="text-xs-left">{{ props.item.email }}</td>
+              <td class="text-xs-left">{{ props.item.id }}</td>
+              <td class="text-xs-left">{{ props.item.username }}</td>
+              <td class="text-xs-left">{{ props.item.name }} {{ props.item.surname }}</td>
               <td class="text-xs-left">{{ props.item.school }}</td>
+              <td class="text-xs-left">{{ props.item.region }}</td>
+              <td class="text-xs-left">{{ props.item.role }}</td>
               <td class="text-xs-left">
-                <v-btn color="orange" to="/ManageUserEdit" round dark><v-icon left>edit</v-icon>Edit</v-btn>
+                <v-btn color="orange" @click="editUser(props.item)" round small dark><v-icon>edit</v-icon>Edit</v-btn>
               </td>
             </template>
             <v-alert slot="no-results" :value="true" color="error" icon="warning">
@@ -48,16 +51,42 @@ export default {
     return {
       search: '',
       userAllHeadersTable: [
-          { text: 'name', align: 'left', sortable: true, value: 'name'},
-          { text: 'email', value: 'email' },
-          { text: 'school', value: 'school' },
-          { text: 'action', value: 'add' }
-        ],
-      userAll:[
-        {id:1 , name:"game", email:"xx@gmail.com", school:"ubu"},
-        {id:1 , name:"game", email:"xx@gmail.com", school:"ubu"},
-        {id:1 , name:"game", email:"xx@gmail.com", school:"ubu"}
+        { text: 'id', align: 'left', sortable: true, value: 'id'},
+        { text: 'username',value: 'username'},
+        { text: 'name',value: 'name'},
+        { text: 'school', value: 'school' },
+        { text: 'region', value: 'region' },
+        { text: 'role', value: 'role' },
+        { text: 'action', value: 'add' }
       ]
+      // userAll:[
+      //   {id:1 , name:"game", email:"xx@gmail.com", school:"ubu"},
+      //   {id:1 , name:"game", email:"xx@gmail.com", school:"ubu"},
+      //   {id:1 , name:"game", email:"xx@gmail.com", school:"ubu"}
+      // ]
+    }
+  },
+  computed:{
+    userAll: function(){
+      var data_return = [];
+      this.$store.state.users.forEach(element => {
+        data_return.push({
+          id: element.id,
+          username: element.username,
+          name: element.name,
+          surname: element.surname,
+          email: element.email,
+          school: element.school,
+          region: element.region,
+          role: element.role,
+        });
+      });
+      return data_return;
+    }
+  },
+  methods:{
+    editUser (input) {
+      this.$store.dispatch('acForEditUser',input);
     }
   }
 }

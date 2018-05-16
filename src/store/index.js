@@ -24,7 +24,10 @@ const state = {
     {title: 'Sign In', path: '/Signin', icon: 'face'},
   ],
   menuLeft: [],
-  projects: []
+  projects: [],
+  forEditProject:{},
+  users:[],
+  forEditUser:{}
 }
 
 const mutations = {
@@ -75,7 +78,7 @@ const mutations = {
         ]
       }
       state.clickLogin = false
-      router.push({name: '/'})
+      router.push({path: '/'})
 
     }else{
       state.clickLogin = true
@@ -84,7 +87,6 @@ const mutations = {
     
 
   },
-
 
   mulLogOut:(state,input)=>{
     state.isLogin = false
@@ -98,17 +100,70 @@ const mutations = {
     ]
     state.menuLeft= []
     state.projects= []
-    router.push({name: '/'})
+    router.push({path: '/'})
   },
-
 
   mulSetProject:(state,input)=>{
     input.forEach(element => {
       //console.log(element);
       state.projects.push(element)
     });
-  }
+  },
 
+  mulSetUser:(state,input)=>{
+
+    var user_all = [];
+    input.forEach(element => {
+      user_all.push({
+        id: element.id,
+        username: element.username,
+        email: element.email,
+        name: element.name,
+        surname: element.surname,
+        school: element.school.name,
+        region: element.school.region,
+        role: element.role
+      });
+    });
+    state.users = user_all;
+
+  },
+
+  mulEditProfile:(state,input)=>{
+    state.userLogin.username = input.username
+    state.userLogin.email = input.email
+    state.userLogin.name = input.name
+    state.userLogin.surname = input.surname,
+    state.userLogin.school = input.school,
+    state.userLogin.region = input.region
+  },
+
+  mulForEditUser:(state,input)=>{
+    state.forEditUser = input;
+    router.push({path: '/ManageUserEdit'})
+  },
+
+  mulEditUser:(state,input)=>{
+
+    state.users.forEach((user, index) => {
+      if (user.id === input.id) {
+          Vue.set(state.users, index, input);
+      }
+    });
+
+  },
+
+  mulDeleteUser:(state,input)=>{
+
+    state.users.forEach((user, index) => {
+      if (user.id === input.id) {
+          // Vue.set(state.users, index, { ...user, selected: 0 });
+          Vue.delete(state.users,index);
+      }
+    });
+    router.push({path: '/ManageUser'})
+
+  },
 
 }
 
@@ -129,6 +184,7 @@ const actions = {
     .then(response =>{
       store.commit('mulLogIn',response.data)   
       if(response.data.length>0){
+        //------------- projects ------------------
         var url_project_by_id ='http://localhost:3000/project';
         axios.get(url_project_by_id, {
           params: {
@@ -142,6 +198,26 @@ const actions = {
         .catch(e =>{
           state.errors = e
         })
+        //---------------------------------------
+
+        //--------------- admin -----------------
+        if(response.data[0].role=='admin' || response.data[0].role=='teacher'){
+          var url_all_user ='http://localhost:3000/user';
+          axios.get(url_all_user, {
+            params: {
+              // email: input.email,
+              // password: input.password,
+            }
+          })
+          .then(response =>{
+            store.commit('mulSetUser',response.data);
+          })
+          .catch(e =>{
+            state.errors = e
+          })
+        }
+
+
       }//end if 
     })
     .catch(e =>{
@@ -152,7 +228,25 @@ const actions = {
 
   acLogOut:(state)=>{
     store.commit('mulLogOut','')
+  },
+
+  acEditProfile:(state,input)=>{
+    store.commit('mulEditProfile',input);
+  },
+
+  acForEditUser:(state,input)=>{
+    store.commit('mulForEditUser',input);
+  },
+
+  acEditUser:(state,input)=>{
+    store.commit('mulEditUser',input);
+  },
+
+  acDeleteUser:(state,input)=>{
+    store.commit('mulDeleteUser',input);
   }
+
+
 }
 
 
