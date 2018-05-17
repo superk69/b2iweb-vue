@@ -11,8 +11,9 @@
           <v-stepper-header>
             <v-stepper-step step="1" 
               :editable ="1 <= stepSet" 
-              :complete="1 <= stepSet">
-                {{step1.title}}
+              :complete="1 <= stepSet"
+              >
+                Register
             </v-stepper-step>
             <v-divider></v-divider>
 
@@ -34,14 +35,18 @@
 
           <v-stepper-items>
             
-            <v-stepper-content step="1">
+            <v-stepper-content step="1"
+              v-for="pitem in projectAll.phasedata"
+              :key="pitem.phase"
+              v-if="pitem.phase==1"
+            >
 
               <v-flex mb-3>
-                <v-alert v-if="step1.result==='pass'" :value="true" type="success">
-                  {{ step1.resultMessage }}
+                <v-alert v-if="pitem.result==='PASS'" :value="true" type="success">
+                  ห้วข้อโปรเจค ผ่านการตรวจสอบแล้ว
                 </v-alert>
-                <v-alert v-if="step1.result==='fail'" :value="true" type="error">
-                  {{ step1.resultMessage }}
+                <v-alert v-if="pitem.result==='FAIL'" :value="true" type="error">
+                  หัวข้อโปรเจค ไม่ผ่านการตรวจสอบ
                 </v-alert>
               </v-flex>
             
@@ -50,7 +55,7 @@
 
                 <v-layout row mb-5>
                   <v-flex xs12 class="text-xs-center">
-                    <h1>{{step1.title}}</h1>
+                    <h1>Register</h1>
                   </v-flex>
                 </v-layout>
 
@@ -59,7 +64,7 @@
                     <p>โครงการ</p>
                   </v-flex>
                   <v-flex xs10>
-                    <h3>{{ project.projectName }}</h3>
+                    <h3>{{ projectAll.projectsetup.project }}</h3>
                   </v-flex>
                 </v-layout>
              
@@ -68,7 +73,7 @@
                     <p>หัวข้อส่งเข้าประกวด</p>
                   </v-flex>
                   <v-flex xs10>
-                    <h4>{{ project.topicsName }}</h4>
+                    <h4>{{ projectAll.projectsetup.name }}</h4>
                   </v-flex>
                 </v-layout>
 
@@ -77,7 +82,11 @@
                     <p>หัวหน้าทีม</p>
                   </v-flex>
                   <v-flex xs10>
-                    <p>อาจารย์ {{ step1.teacher.name }} {{ step1.teacher.surname }}</p>
+                    <p v-for="uitem in projectAll.member"
+                    :key="uitem.id"
+                    v-if="uitem.role=='teacher'">
+                      อาจารย์ {{ uitem.name }} {{ uitem.surname }}
+                    </p>
                   </v-flex>
                 </v-layout>
 
@@ -86,8 +95,10 @@
                     <p>สมาชิกในทีม</p>
                   </v-flex>
                   <v-flex xs10>
-                    <p v-for=" item in step1.student" :key="item.id">
-                      {{ item.name}} {{ item.surname}}
+                    <p v-for="uitem in projectAll.member"
+                    :key="uitem.id"
+                    v-if="uitem.role=='student'">
+                      {{ uitem.name }} {{ uitem.surname }}
                     </p>
                   </v-flex>
                 </v-layout>
@@ -101,12 +112,13 @@
 
                     <v-layout row >
                       <v-chip 
-                        v-for="item in step1.document"
+                        v-for="item in pitem.upload"
                         :key="item.name"  
+                        v-if="item.type=='PDF'"
                         @input="deleteDoc1(item)"
                         close 
                         label>
-                        <router-link :to="item.path">{{item.name}}</router-link>
+                        <a :href="item.path" target="_blank">{{item.name}}</a>
                           
                       </v-chip>                   
                     </v-layout>
@@ -140,13 +152,14 @@
                         <v-container fluid grid-list-md>
                           <v-layout>
                             <v-flex
-                              v-for="card in step1.imageData"
-                              v-bind="{ [`xs${card.flex}`]: true }"
-                              :key="card.title"
+                              v-for="card in pitem.upload"
+                              v-if="card.type=='IMG'"
+                              v-bind="{ [`xs4`]: true }"
+                              :key="card.name"
                             >
                               <v-card>
                                 <v-card-media
-                                  :src="card.src"
+                                  :src="card.path"
                                   height="200px"
                                 >
                                 </v-card-media>
@@ -457,6 +470,7 @@
       return {
          stepSet: 3, //step set
          stepIndex: 1, //step click
+         projectAll: this.$store.state.forEditProject,
          project: {
            projectId: 1,
            projectName: 'Bridge Stone 2 Inventors',

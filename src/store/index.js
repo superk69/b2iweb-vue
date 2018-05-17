@@ -191,6 +191,18 @@ const mutations = {
 
   },
 
+  mulForEditProject:(state,input)=>{
+    state.forEditProject = input;
+
+
+    if(state.userLogin.role==='admin'){
+      router.push({path: '/'})
+    }else{
+      router.push({path: '/ProjectManage'})
+    }
+    
+  },
+
 }
 
 const getters = {
@@ -286,6 +298,11 @@ const actions = {
   acDeleteTeam:(state,input)=>{
     store.commit('mulForDeleteTeam',input);
   },
+
+  acForEditProject:(state,input)=>{
+    store.commit('mulForEditProject',input);
+  },
+
 
 }
 
