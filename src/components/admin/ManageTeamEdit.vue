@@ -2,7 +2,7 @@
   <v-container fluid mb-5>
     <v-layout row wrap>
       <v-flex xs12 class="text-xs-center">
-        <h1>Create Team</h1>
+        <h1>Edit Team</h1>
       </v-flex>
       <v-flex xs12 sm10 offset-sm1 mt-3 pa-5 class="grey lighten-4">
         
@@ -12,10 +12,8 @@
           </v-flex>
           <v-flex xs10>
             <v-text-field
-              name="input-1-3"
-              label="Title"
-              :value="projectName"
-              single-line
+              label="หัวข้อ"
+              v-model="projectAll.projectsetup.name"
             ></v-text-field>
           </v-flex>
         </v-layout>
@@ -28,6 +26,7 @@
             <v-select
               label="โครงการ"
               :items="projectList"
+              v-model="projectAll.projectsetup.project"
             ></v-select>
           </v-flex>
         </v-layout>
@@ -37,7 +36,12 @@
             <v-subheader>หัวหน้าทีม/ผู้คุมทีม</v-subheader>
           </v-flex>
           <v-flex xs10>
-            <v-subheader>{{teacherData.name}} {{teacherData.surname}}</v-subheader>
+            <v-subheader v-for="item in projectAll.member"
+             :key="item.id"
+             v-if="item.role=='teacher'"
+             >
+                {{item.name}} {{item.surname}}
+             </v-subheader>
           </v-flex>
         </v-layout>
 
@@ -47,12 +51,13 @@
           </v-flex>
           <v-flex xs10>
             <v-chip
-             v-for="item in studentData"
+             v-for="item in projectAll.member"
              :key="item.id"
              @input="deleteStudent(item)"
+             v-if="item.role=='student'"
              close 
              label>
-                {{item.name}} {{item.surname}}
+              {{item.name}} {{item.surname}}
              </v-chip>
 
 
@@ -86,7 +91,7 @@
                         <td class="text-xs-left">{{ props.item.email }}</td>
                         <td class="text-xs-left">{{ props.item.school }}</td>
                         <td class="text-xs-left">
-                          <v-chip outline color="green" small @click="selectStudent(props.item)">
+                          <v-chip outline color="green" small @click="selectStudent(props.item.data)">
                             <v-icon>add</v-icon>Add
                             </v-chip>
                         </td>
@@ -112,8 +117,8 @@
 
         <v-layout row>
           <v-flex xs12 class="text-xs-center">
-            <v-btn round color="primary" dark small>Save</v-btn>
-            <v-btn round color="error" dark small>Clear</v-btn>
+            <v-btn round @click="saveProject" color="primary" dark small>Save</v-btn>
+            <v-btn to="/ManageTeams" round color="error" dark small>Clear</v-btn>
           </v-flex>
         </v-layout>
 
@@ -129,47 +134,55 @@
     data () {
       return {
         dialogSelectStudent: false,
-        searchStudent: '',
-        projectName: '',
-        projectList: ['โครงการปีพัฒนาการศึกษา 2018', 'โครงการศึกษาผู้เรียน', 'โครงการ สสวท.'],
-        teacherData:{
-          id: 123,
-          email: 'TProjectTest@gmail.com',
-          name: 'ปรีชา',
-          surname: 'แสนดี',
-          school: 'UBU'
-        },
-        studentData:[
-          {id: 1, email: 'somJai@gmail.com',name: 'สมใจ',surname: 'ใจดี', school: 'UBU'},
-          {id: 2, email: 'somSuk@gmail.com',name: 'สมศักดิ์',surname: 'ใจสุข', school: 'UBU'},
-          {id: 3, email: 'somChai@gmail.com',name: 'สมชัย',surname: 'ใจศรี', school: 'UBU'}
-        ],
+        searchStudent:'',
+        projectList: ['Bridge Stone 2 Inventors'],
         studentHeadersTable: [
           { text: 'name', align: 'left', sortable: true, value: 'name'},
           { text: 'email', value: 'email' },
           { text: 'school', value: 'school' },
           { text: 'action', value: 'add' }
         ],
-        studentAll: [
-          {value: false,name: 'นายดี',surname: 'ใจดี', email: 'Dee@gmail.com' , school: 'UBU' , id: 1 },
-          {value: false,name: 'นายมานะ',surname: 'ใจสุข', email: 'mana@gmail.com' , school: 'UBU' , id: 2 },
-          {value: false,name: 'นายทำดี',surname: 'ใจกล้า', email: 'tamD@gmail.com' , school: 'UBU' , id: 3 },
-          {value: false,name: 'นายปัญญา',surname: 'มงคล', email: 'PPYa@gmail.com' , school: 'UBU' , id: 4 },
-          {value: false,name: 'น.ส.สมศรี',surname: 'สมใจ', email: 'SOMS@gmail.com' , school: 'UBU' , id: 5 },
-          {value: false,name: 'นายบุญเติม',surname: 'กล้าหาญ', email: 'BT@gmail.com' , school: 'UBU' , id: 6 },
-          {value: false,name: 'น.ส.ฤดี',surname: 'ทำดี', email: 'AADEE@gmail.com' , school: 'UBU' , id: 7 }
-        ]
+        projectAll: this.$store.state.forEditProject,
       }
     },
     methods: {
       deleteStudent(item){
-        this.studentData.splice(this.studentData.indexOf(item), 1)
-        this.studentData = [...this.studentData]
+        console.log(this.projectAll.member.indexOf(item))
+        this.projectAll.member.splice(this.projectAll.member.indexOf(item), 1)
       },
       selectStudent(item){
         this.dialogSelectStudent = false;
-        this.studentData.push({id: item.id, email: item.email,name: item.name,surname: item.surname, school: item.school});
-        this.studentData = [...this.studentData]
+        var _check = true;
+        this.projectAll.member.forEach((user)=>{
+          if(user.id===item.id){
+            _check=false;
+          }
+        });
+        if(_check){
+          this.projectAll.member.push(item);
+        }
+      },
+      saveProject(){
+        this.$store.dispatch('acEditTeam',this.projectAll);
+      }
+    },
+    computed:{
+      studentAll: function(){
+        var data_return = [];
+        this.$store.state.users.forEach(element => {
+          if(element.role=='student'){
+            data_return.push({
+              value: false,
+              name: element.name,
+              surname: element.surname, 
+              email: element.email , 
+              school: element.school , 
+              id: 1,
+              data:element
+            });
+          }
+        });
+        return data_return;
       }
     }
   }

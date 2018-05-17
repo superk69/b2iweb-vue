@@ -29,7 +29,7 @@
                 <td class="text-xs-left">{{ props.item.student }}</td>
                 <td class="text-xs-left">{{ props.item.status }}</td>
                 <td class="text-xs-left">
-                  <v-btn color="warning" to="/ManageTeamsEdit" round small ><v-icon>create</v-icon>Edit</v-btn>
+                  <v-btn color="orange"  @click="editTeam(props.item.data)" round small dark><v-icon>create</v-icon>Edit</v-btn>
                 </td>
               </template>
               <v-alert slot="no-results" :value="true" color="error" icon="warning">
@@ -57,40 +57,24 @@
           { text: 'status', value: 'status' },
           { text: 'action', value: 'id' }
         ],
-        // items: [
-        //   {value: false,project: 'Bridgstone 2018',name: 'สิ่งประดิษฐ์จากยางพารา',
-        //     teacher: 'นายอาจาย์ หวังดี',student: 'นายดี ใจกล้า,นายมานะ ใจดี,นายสุที ใจสุข',
-        //     status: 'ส่งเอกสารการสมัคร',id: 1
-        //   },
-        //   {value: false,project: 'Bridgstone 2018',name: 'สิ่งประดิษฐ์จากผักตบชวา',
-        //     teacher: 'นายสอง',student: 'นายดี ใจกล้า,นายมานะ ใจดี,นายสุที ใจสุข',
-        //     status: 'ส่งเอกสารการสมัคร',id: 2
-        //   },
-        //   {value: false,project: 'Bridgstone 2018',name: 'สิ่งประดิษฐ์จากต้นยางพารา',
-        //     teacher: 'นางสาม',student: 'นายดี ใจกล้า,นายมานะ ใจดี,นายสุที ใจสุข',
-        //     status: 'ส่งเอกสารการสมัคร',id: 3
-        //   },
-        //   {value: false,project: 'Bridgstone 2018',name: 'สิ่งประดิษฐ์จากต้นกล้วย',
-        //     teacher: 'อาจารย์สี่',student: 'นายดี ใจกล้า,นายมานะ ใจดี,นายสุที ใจสุข',
-        //     status: 'ส่งเอกสารการสมัคร',id: 4
-        //   },
-        //   {value: false,project: 'Bridgstone 2018',name: 'สิ่งประดิษฐ์จากต้นตาล',
-        //     teacher: 'อาจารย์เกรียง',student: 'นายดี ใจกล้า,นายมานะ ใจดี,นายสุที ใจสุข',
-        //     status: 'ส่งเอกสารการสมัคร',id: 5
-        //   }
-        // ]
       }
     },
     computed:{
       items: function(){
         var data_return = [];
-        this.$store.state.projects.forEach(element => {
-          var _project = element.projectsetup.project;
-          var _name = element.projectsetup.name;
+        var _project = '';
+          var _name = '';
           var _teacher='';
           var _student='';
           var _status = '';
-          var _id = element.id;
+          var _id = 0;
+        this.$store.state.projects.forEach(element => {
+          _project = element.projectsetup.project;
+          _name = element.projectsetup.name;
+          _teacher='';
+          _student='';
+          _status = 'register';
+          _id = element.id;
           
           element.member.forEach(ele =>{
             if(ele.role=='teacher'){
@@ -105,13 +89,19 @@
 
           data_return.push({value: false,project:_project,name:_name,
             teacher: _teacher,student: _student,
-            status: _status,id: _id
+            status: _status,id: _id,data:element
           });
 
         });
         return data_return;
       }
+    },
+    methods:{
+      editTeam (input) {
+        this.$store.dispatch('acForEditTeam',input);
+      }
     }
+
   }
 </script>
 
