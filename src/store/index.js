@@ -11,7 +11,6 @@ import router from '@/router'
 Vue.use(Vuex)
 
 //json-server --watch db.json
-//https://medium.com/@takkamonpob/vue2-0-vuex-%E0%B8%AB%E0%B8%A1%E0%B8%94%E0%B8%9B%E0%B8%B1%E0%B8%8D%E0%B8%AB%E0%B8%B2%E0%B9%80%E0%B8%A3%E0%B8%B7%E0%B9%88%E0%B8%AD%E0%B8%87%E0%B8%95%E0%B8%B1%E0%B8%A7%E0%B9%81%E0%B8%9B%E0%B8%A3-e710a3be6592
 const state = {
   isLogin: false,
   clickLogin: false,
@@ -89,23 +88,27 @@ const mutations = {
   },
 
   mulLogOut:(state,input)=>{
-    state.isLogin = false
-    state.errors=''
-    state.userLogin = {}
+    state.isLogin = false;
+    state.errors='';
+    state.userLogin = {};
     state.menuHeader = [
       {title: 'Home', path: '/', icon: 'home'},
       {title: 'Blog', path: '/Blog', icon: 'assignment'},
       {title: 'Register', path: '/Register', icon: 'person_add'},
       {title: 'Sign In', path: '/Signin', icon: 'face'},
-    ]
-    state.menuLeft= []
-    state.projects= []
+    ];
+    state.menuLeft= [];
+    state.projects= [];
+    state.forEditProject={};
+    state.users=[];
+    state.forEditUser={};
+
+
     router.push({path: '/'})
   },
 
   mulSetProject:(state,input)=>{
     input.forEach(element => {
-      //console.log(element);
       state.projects.push(element)
     });
   },
@@ -162,6 +165,41 @@ const mutations = {
     });
     router.push({path: '/ManageUser'})
 
+  },
+
+  mulForEditTeam:(state,input)=>{
+    state.forEditProject = input;
+    router.push({path: '/ManageTeamsEdit'})
+  },
+
+  mulAddTeam:(state,input)=>{
+    console.log(input);
+  },
+
+  mulDeleteTeam:(state,input)=>{
+    console.log(input);
+  },
+
+  mulEditTeam:(state,input)=>{
+    console.log(input);
+    state.projects.forEach((project, index) => {
+      if (project.id === input.id) {
+          Vue.set(state.projects, index, input);
+      }
+    });
+
+  },
+
+  mulForEditProject:(state,input)=>{
+    state.forEditProject = input;
+
+
+    if(state.userLogin.role==='admin'){
+      router.push({path: '/'})
+    }else{
+      router.push({path: '/ProjectManage'})
+    }
+    
   },
 
 }
@@ -243,7 +281,26 @@ const actions = {
 
   acDeleteUser:(state,input)=>{
     store.commit('mulDeleteUser',input);
-  }
+  },
+
+  acForEditTeam:(state,input)=>{
+    store.commit('mulForEditTeam',input);
+  },
+
+  acEditTeam:(state,input)=>{
+    store.commit('mulEditTeam',input);
+  },
+
+  acAddTeam:(state,input)=>{
+    store.commit('mulAddTeam',input);
+  },
+  acDeleteTeam:(state,input)=>{
+    store.commit('mulForDeleteTeam',input);
+  },
+
+  acForEditProject:(state,input)=>{
+    store.commit('mulForEditProject',input);
+  },
 
 
 }
