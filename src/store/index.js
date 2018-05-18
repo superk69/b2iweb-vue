@@ -157,7 +157,6 @@ const mutations = {
 
     state.users.forEach((user, index) => {
       if (user.id === input.id) {
-          // Vue.set(state.users, index, { ...user, selected: 0 });
           Vue.delete(state.users,index);
       }
     });
