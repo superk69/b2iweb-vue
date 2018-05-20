@@ -5,6 +5,7 @@ import firebase from 'firebase'
 
 const routerOptions = [
   {path: '/', component: 'Home'},
+  {path: '/Post', component: 'PostDetail'},
   {path: '/Profile', component: 'Profile'},
   {path: '/Register', component: 'Register'},
   {path: '/Signin', component: 'Signin'},

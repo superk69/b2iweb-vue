@@ -4,8 +4,17 @@
       <v-flex xs12 class="text-xs-center">
         <h1>Edit Team</h1>
       </v-flex>
+          
       <v-flex xs12 sm10 offset-sm1 mt-3 pa-5 class="grey lighten-4">
-        
+        <!-- v-if="alertStatus" -->
+        <v-layout row>
+          <v-flex xs12>
+            <v-alert v-model="alert" :class="alertStatus" dismissible>
+              This is Save {{alertStatus}} alert.
+            </v-alert>
+          </v-flex>
+        </v-layout>
+
         <v-layout row>
           <v-flex xs2>
             <v-subheader>ห้ัวข้อส่งเข้าประกวด</v-subheader>
@@ -117,8 +126,8 @@
 
         <v-layout row>
           <v-flex xs12 class="text-xs-center">
-            <v-btn round @click="saveProject" color="primary" dark small>Save</v-btn>
-            <v-btn to="/ManageTeams" round color="error" dark small>Clear</v-btn>
+            <v-btn @click="saveProject" round color="primary" dark small>Save</v-btn>
+            <v-btn @click="cancelProject" round color="error" dark small>Clear</v-btn>
           </v-flex>
         </v-layout>
 
@@ -133,6 +142,8 @@
   export default {
     data () {
       return {
+        alert: false,
+
         dialogSelectStudent: false,
         searchStudent:'',
         projectList: ['Bridge Stone 2 Inventors'],
@@ -142,12 +153,11 @@
           { text: 'school', value: 'school' },
           { text: 'action', value: 'add' }
         ],
-        projectAll: this.$store.state.forEditProject,
+        projectAll: this.$store.state.forEditProject
       }
     },
     methods: {
       deleteStudent(item){
-        console.log(this.projectAll.member.indexOf(item))
         this.projectAll.member.splice(this.projectAll.member.indexOf(item), 1)
       },
       selectStudent(item){
@@ -163,10 +173,17 @@
         }
       },
       saveProject(){
-        this.$store.dispatch('acEditTeam',this.projectAll);
+        this.$store.dispatch('acEditTeam',this.projectAll) 
+      },
+      cancelProject(){
+        this.$store.dispatch('acCancelTeam','')
       }
     },
     computed:{
+      // projectForEdit: function(){
+      //   console.log("Call:projectForEdit")
+      //   return this.$store.state.forEditProject
+      // },
       studentAll: function(){
         var data_return = [];
         this.$store.state.users.forEach(element => {
@@ -183,7 +200,14 @@
           }
         });
         return data_return;
+      },
+      alertStatus: function(){
+        var data_return = ''
+        data_return = this.$store.state.editProjectStatus
+        this.alert= data_return!=''
+        return data_return
       }
+
     }
   }
 </script>

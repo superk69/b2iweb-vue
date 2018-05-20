@@ -18,7 +18,6 @@ const state = {
   userLogin: {},
   menuHeader: [
     {title: 'Home', path: '/', icon: 'home'},
-    {title: 'Blog', path: '/Blog', icon: 'assignment'},
     {title: 'Register', path: '/Register', icon: 'person_add'},
     {title: 'Sign In', path: '/Signin', icon: 'face'},
   ],
@@ -26,10 +25,31 @@ const state = {
   projects: [],
   forEditProject:{},
   users:[],
-  forEditUser:{}
+  forEditUser:{},
+  editProjectStatus:'', //success , error ,df:''
+  postAll:[],
+  forEditPost:{},
 }
 
 const mutations = {
+
+  mulPost:(state,input)=>{
+   state.postAll = input
+  },
+  mulLoadMore:(state,input)=>{
+    console.log(input)
+    var index = 8;
+    input.forEach(element => {
+      element.id= index++
+      state.postAll.push(element);
+    });    
+  },
+  mulPostDetail:(state,input)=>{
+    state.forEditPost = input
+    router.push({path: '/Post'})
+  },
+
+
 
   mulLogIn:(state, input)=>{
     //console.log(input);
@@ -53,7 +73,7 @@ const mutations = {
 
       state.menuHeader = [
         {title: 'Home', path: '/', icon: 'home'},
-        {title: 'Blog', path: '/Blog', icon: 'assignment'},
+        {title: input.username , path: '/Profile', icon: 'face'},
       ]
 
       if(checkRole=='admin'){
@@ -77,7 +97,12 @@ const mutations = {
         ]
       }
       state.clickLogin = false
-      router.push({path: '/'})
+      if(checkRole==='admin'){
+        router.push({path: '/ManageProject'})
+      }else{
+        router.push({path: '/ProjectList'})
+      }
+      
 
     }else{
       state.clickLogin = true
@@ -166,9 +191,14 @@ const mutations = {
     router.push({path: '/ManageUser'})
 
   },
-
+  //-------- Team ------------
   mulForEditTeam:(state,input)=>{
-    state.forEditProject = input;
+    state.editProjectStatus = ''
+    state.projects.forEach((project, index) => {
+      if (project.id === input.id) {
+        state.forEditProject=project
+      }
+    });
     router.push({path: '/ManageTeamsEdit'})
   },
 
@@ -181,33 +211,46 @@ const mutations = {
   },
 
   mulEditTeam:(state,input)=>{
-    console.log(input);
+    //console.log(input);
+    state.editProjectStatus = 'success'
     state.projects.forEach((project, index) => {
       if (project.id === input.id) {
           Vue.set(state.projects, index, input);
       }
     });
-
   },
 
+  mulCancelTeam:(state,input)=>{
+    if(store.state.userLogin.role==='admin'){
+      router.push({path: '/ManageTeams'})
+    }else{
+      router.push({path: '/ManageTeam'})
+    }
+  },
+  //------------ project ----------
   mulForEditProject:(state,input)=>{
     state.forEditProject = input;
-
-
     if(state.userLogin.role==='admin'){
-      router.push({path: '/'})
+      router.push({path: '/ProjectManage'})
     }else{
       router.push({path: '/ProjectManage'})
     }
     
   },
+  
 
 }
 
 const getters = {
-
+  postAll: state => state.forEditProject,
 }
 
+/*  ===================================
+    ===================================
+            actions
+    ===================================
+    ===================================
+*/
 const actions = {
 
   acLogIn: (state,input)=>{
@@ -262,44 +305,79 @@ const actions = {
     })
     
   },
-
   acLogOut:(state)=>{
     store.commit('mulLogOut','')
   },
-
+  //========= edit profile ==========
   acEditProfile:(state,input)=>{
     store.commit('mulEditProfile',input);
   },
-
   acForEditUser:(state,input)=>{
     store.commit('mulForEditUser',input);
   },
-
   acEditUser:(state,input)=>{
     store.commit('mulEditUser',input);
   },
-
   acDeleteUser:(state,input)=>{
     store.commit('mulDeleteUser',input);
   },
-
+  //================ edit team ==========
   acForEditTeam:(state,input)=>{
     store.commit('mulForEditTeam',input);
   },
-
   acEditTeam:(state,input)=>{
+    store.state.editProjectStatus=''
     store.commit('mulEditTeam',input);
   },
-
+  acCancelTeam:(state,input)=>{
+    store.state.forEditProject={}
+    store.commit('mulCancelTeam',input);
+  },
   acAddTeam:(state,input)=>{
     store.commit('mulAddTeam',input);
   },
   acDeleteTeam:(state,input)=>{
     store.commit('mulForDeleteTeam',input);
   },
-
+  //================ edit Project ============
   acForEditProject:(state,input)=>{
     store.commit('mulForEditProject',input);
+  },
+
+
+  //================= post =================
+  acPost:(state,input)=>{
+    var url = 'http://localhost:3000/post';
+    axios.get(url, {
+      params: {
+        // email: input.email,
+        // password: input.password,
+      }
+    })
+    .then(response =>{
+      store.commit('mulPost',response.data);
+    })
+    .catch(e =>{
+      state.errors = e
+    })
+  },
+  acLoadMore:(state,input)=>{
+    var url = 'http://localhost:3000/post';
+    axios.get(url, {
+      params: {
+        // email: input.email,
+        // password: input.password,
+      }
+    })
+    .then(response =>{
+      store.commit('mulLoadMore',response.data);
+    })
+    .catch(e =>{
+      state.errors = e
+    })
+  },
+  acPostDetail:(state,input)=>{
+    store.commit('mulPostDetail',input);
   },
 
 
